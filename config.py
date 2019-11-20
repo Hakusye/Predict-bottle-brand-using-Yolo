@@ -1,16 +1,16 @@
 configurations = {
-    "config":dict(
-    SEED = 1234,
-    DATA_LOOT = "/",
-    BATCH_SIZE = 32,
-    IMAGE_SIZE = 224,
-    DEVICE = "cuda",
-    CLASSES = 13,
-    mean = (0.485,0.456,0.406),
-    std = (0.299,0.224,0.225),
-    MAX_EPOCH = 30,
-    WEIGHT_DECAY = 1e-3
-    ),
+    "config":{
+    "SEED" : 1234,
+    "DATA_LOOT" : "/",
+    "BATCH_SIZE" : 32,
+    "IMAGE_SIZE" : 224,
+    "DEVICE" : "cuda",
+    "CLASSES" : 13,
+    "mean" : (0.485,0.456,0.406),
+    "std" : (0.299,0.224,0.225),
+    "MAX_EPOCH" : 30,
+    "WEIGHT_DECAY" : 1e-3
+    },
 
     "class_name" :{
         "aquarius" : 0,
@@ -24,6 +24,21 @@ configurations = {
         "irohas" : 8,
         "sprite" : 9,
         "toropicana" : 10,
-        "wilkinson" : 11,
-    }
+        "wilkinson" : 11
+    },
+
+    "rev_class_name" :[
+         "aquarius",
+         "ayataka_browm_rice",
+         "calpis",
+         "craft_boss_black",
+        "craft_boss_latte",
+        "crystal_geyser" ,
+        "fresh_tea",
+        "green_dataka",
+        "irohas",
+        "sprite",
+        "toropicana",
+        "wilkinson"
+    ]
 }
