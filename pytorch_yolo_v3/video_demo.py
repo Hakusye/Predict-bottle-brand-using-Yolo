@@ -191,23 +191,12 @@ if __name__ == '__main__':
             for i in range(output.shape[0]):
                 output[i, [1,3]] = torch.clamp(output[i, [1,3]], 0.0, im_dim[i,0])
                 output[i, [2,4]] = torch.clamp(output[i, [2,4]], 0.0, im_dim[i,1])
-            #print(output.shape)
-            clipped = [] #[img,class]
-            for i in range(len(output)):
-                cls = int(output[i][-1])
-                #label = "{0}".format(classes[cls])
-                clipped.append([orig_im[int(output[i][2]):int(output[i][4]),int(output[i][1]):int(output[i][3])],cls])
-            #clipped = orig_im[200:400,70:270]
-            #print(clipped)
             classes = load_classes('data/coco.names')
             colors = pkl.load(open("pallete", "rb"))
             ### 枠で囲うところ。最終的には付けたい
             list(map(lambda x: write(x, orig_im,net,transform), output))
             #print(im3)
             cv2.imshow("frame", orig_im)
-            for i in range(len(clipped)):
-                cv2.imwrite("images/"+str(clipped[i][1])+"_"+str(cnt)+".png",clipped[i][0])
-            #cv2.imshow("frame2", clipped)
             cnt+=1
             key = cv2.waitKey(1)
             if key & 0xFF == ord('q'):
