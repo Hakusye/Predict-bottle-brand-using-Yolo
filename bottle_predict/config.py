@@ -5,9 +5,9 @@ configurations = {
     "BATCH_SIZE" : 32,
     "IMAGE_SIZE" : 224,
     "DEVICE" : "cuda",
-    "CLASSES" : 13,
-    "mean" : (0.485,0.456,0.406),
-    "std" : (0.299,0.224,0.225),
+    "CLASSES" : 12,
+    "MEAN" : (0.485,0.456,0.406),
+    "STD" : (0.299,0.224,0.225),
     "MAX_EPOCH" : 30,
     "WEIGHT_DECAY" : 1e-3
     },
@@ -20,10 +20,10 @@ configurations = {
         "craft_boss_latte" : 4,
         "crystal_geyser" : 5,
         "fresh_tea" : 6,
-        "green_dataka" : 7,
+        "green_dakara" : 7,
         "irohas" : 8,
         "sprite" : 9,
-        "toropicana" : 10,
+        "tropicana" : 10,
         "wilkinson" : 11
     },
 
@@ -35,10 +35,10 @@ configurations = {
         "craft_boss_latte",
         "crystal_geyser" ,
         "fresh_tea",
-        "green_dataka",
+        "green_dakara",
         "irohas",
         "sprite",
-        "toropicana",
+        "tropicana",
         "wilkinson"
     ]
 }

@@ -1,0 +1,321 @@
+{
+ "nbformat": 4,
+ "nbformat_minor": 2,
+ "metadata": {
+  "language_info": {
+   "name": "python",
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   }
+  },
+  "orig_nbformat": 2,
+  "file_extension": ".py",
+  "mimetype": "text/x-python",
+  "name": "python",
+  "npconvert_exporter": "python",
+  "pygments_lexer": "ipython3",
+  "version": 3
+ },
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from config import configurations"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 34,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": "['aquarius', 'ayataka_browm_rice', 'calpis', 'craft_boss_black', 'craft_boss_latte', 'crystal_geyser', 'fresh_tea', 'green_dataka', 'irohas', 'sprite', 'toropicana', 'wilkinson']\n"
+    },
+    {
+     "data": {
+      "text/plain": "'ayataka_browm_rice'"
+     },
+     "execution_count": 34,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "aaa = configurations[\"rev_class_name\"]\n",
+    "print(aaa)\n",
+    "aaa[1]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "\n",
+    "        \"9\" :\"sprite\",\n",
+    "        \"10\":\"toropicana\",\n",
+    "        \"11\":\"wilkinson\"\n",
+    "    }\n",
+    "}"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 33,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "configurations = {\n",
+    "    \"config\":{\n",
+    "    \"SEED\" : 1234,\n",
+    "    \"DATA_LOOT\" : \"/\",\n",
+    "    \"BATCH_SIZE\" : 32,\n",
+    "    \"IMAGE_SIZE\" : 224,\n",
+    "    \"DEVICE\" : \"cuda\",\n",
+    "    \"CLASSES\" : 13,\n",
+    "    \"MEAN\" : (0.485,0.456,0.406),\n",
+    "    \"STD\" : (0.299,0.224,0.225),\n",
+    "    \"MAX_EPOCH\" : 30,\n",
+    "    \"WEIGHT_DECAY\" : 1e-3\n",
+    "    },\n",
+    "\n",
+    "    \"class_name\" :{\n",
+    "        \"aquarius\" : 0,\n",
+    "        \"ayataka_brown_rice\" : 1,\n",
+    "        \"calpis\": 2,\n",
+    "        \"craft_boss_black\" : 3,\n",
+    "        \"craft_boss_latte\" : 4,\n",
+    "        \"crystal_geyser\" : 5,\n",
+    "        \"fresh_tea\" : 6,\n",
+    "        \"green_dataka\" : 7,\n",
+    "        \"irohas\" : 8,\n",
+    "        \"sprite\" : 9,\n",
+    "        \"toropicana\" : 10,\n",
+    "        \"wilkinson\" : 11\n",
+    "    },\n",
+    "\n",
+    "    \"rev_class_name\" :[\n",
+    "         \"aquarius\",\n",
+    "         \"ayataka_browm_rice\",\n",
+    "         \"calpis\",\n",
+    "         \"craft_boss_black\",\n",
+    "        \"craft_boss_latte\",\n",
+    "        \"crystal_geyser\" ,\n",
+    "        \"fresh_tea\",\n",
+    "        \"green_dataka\",\n",
+    "        \"irohas\",\n",
+    "        \"sprite\",\n",
+    "        \"toropicana\",\n",
+    "        \"wilkinson\"\n",
+    "    ]\n",
+    "}"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "ModuleNotFoundError",
+     "evalue": "No module named 'Transform'",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[0;31mModuleNotFoundError\u001b[0m                       Traceback (most recent call last)",
+      "\u001b[0;32m<ipython-input-1-d18d59b5539a>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m()\u001b[0m\n\u001b[1;32m     18\u001b[0m \u001b[0;32mfrom\u001b[0m \u001b[0mtorch\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mautograd\u001b[0m \u001b[0;32mimport\u001b[0m \u001b[0mVariable\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     19\u001b[0m \u001b[0;32mfrom\u001b[0m \u001b[0mtorchvision\u001b[0m \u001b[0;32mimport\u001b[0m \u001b[0mmodels\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mtransforms\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 20\u001b[0;31m \u001b[0;32mfrom\u001b[0m \u001b[0mTransform\u001b[0m \u001b[0;32mimport\u001b[0m \u001b[0;34m*\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+      "\u001b[0;31mModuleNotFoundError\u001b[0m: No module named 'Transform'"
+     ]
+    }
+   ],
+   "source": [
+    "##Datasetの他にリスト生成したりするとこ\n",
+    "### 10/1多分完成\n",
+    "import glob\n",
+    "import os.path as osp\n",
+    "import random\n",
+    "import numpy as np\n",
+    "import json\n",
+    "import re\n",
+    "from PIL import Image\n",
+    "import matplotlib.pyplot as plt\n",
+    "import pandas as pd\n",
+    "#%matplotlib inline\n",
+    "\n",
+    "import torch\n",
+    "import torch.nn as nn\n",
+    "import torch.nn.functional as F\n",
+    "import torchvision\n",
+    "from torch.autograd import Variable\n",
+    "from torchvision import models, transforms\n",
+    "from Transform import *\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "NameError",
+     "evalue": "name 'ImageTransform' is not defined",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[0;31mNameError\u001b[0m                                 Traceback (most recent call last)",
+      "\u001b[0;32m<ipython-input-8-7f9b428692c9>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m()\u001b[0m\n\u001b[1;32m      9\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     10\u001b[0m train_dataset = Dataset(\n\u001b[0;32m---> 11\u001b[0;31m     file_list=train_list, transform=ImageTransform(size, mean, std), phase='train')\n\u001b[0m\u001b[1;32m     12\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     13\u001b[0m val_dataset = Dataset(\n",
+      "\u001b[0;31mNameError\u001b[0m: name 'ImageTransform' is not defined"
+     ]
+    }
+   ],
+   "source": [
+    "\n",
+    "class DistancePredictor():\n",
+    "\tdef __init__(self,class_index):\n",
+    "\t\tself.class_index = class_index\n",
+    "\n",
+    "\tdef get_argmax(self,out):\n",
+    "\t\tmaxid = np.argmax(out.detach().numpy())\n",
+    "\t\tpredicter_label_name = self.class_index[str(maxid)][0]\n",
+    "\t\treturn predicter_label_name\n",
+    "\n",
+    "def make_datapath_list():\n",
+    "\trootpath = \"../images/\"\n",
+    "\ttarget_path = osp.join(rootpath + '*/*.jpg')\n",
+    "\tval_list = []\n",
+    "\ttrain_list = []\n",
+    "\tfor path in glob.glob(target_path):\n",
+    "\t\tif(random.random() < 0.15):\n",
+    "\t\t\tval_list.append(path)\n",
+    "\t\telse:\n",
+    "\t\t\ttrain_list.append(path)\n",
+    "\treturn val_list, train_list\n",
+    "\n",
+    "class Dataset():\n",
+    "\tdef __init__(self, file_list, transform=None, phase='train'):\n",
+    "\t\tself.file_list = file_list  # ファイルパスのリスト\n",
+    "\t\tself.transform = transform  # 前処理クラスのインスタンス\n",
+    "\t\tself.phase = phase  # train or valの指定\n",
+    "\n",
+    "\tdef __len__(self):\n",
+    "\t\treturn len(self.file_list)\n",
+    "\n",
+    "\tdef __getitem__(self, index):\n",
+    "\t\timg_path = self.file_list[index]\n",
+    "\t\timg = Image.open(img_path)\n",
+    "\t\t#中の計算部分は貼る位置のピクセル調整。あまり気にしなくて良い\n",
+    "\t\timg_transformed = self.transform(img, self.phase)  # torch.Size([3, 224, 224])\n",
+    "\t\tlabel = img_path.split(\"/\")\n",
+    "\t\t#label = img_path[3:18]\n",
+    "\t\t#label = re.findall('.*?(\\d+).*',label)\n",
+    "\t\tlabel = label[2]\n",
+    "\t\tprint(label)\n",
+    "\t\tlabel = self.make_label(label)\n",
+    "\t\t\n",
+    "\t\treturn img_transformed, label\n",
+    "        \n",
+    "\tdef make_label(self,labels):\n",
+    "\t\tif label == \"aquarius/\":\n",
+    "\t\t\tlabel = 0\n",
+    "\t\tif label == \"ayataka_brown_rice/\":\n",
+    "\t\t\tlabel = 1\n",
+    "\t\tif label == \"calpis/\":\n",
+    "\t\t\tlabel = 2\n",
+    "\t\tif label == \"craft_boss_black/\":\n",
+    "\t\t\tlabel = 3\n",
+    "\t\tif label == \"craft_boss_latte/\":\n",
+    "\t\t\tlabel = 4\n",
+    "\t\tif label == \"crystal_geyser/\":\n",
+    "\t\t\tlabel = 5\n",
+    "\t\tif label == \"fresh_tea/\":\n",
+    "\t\t\tlabel = 6\n",
+    "\t\tif label == \"green_dakara/\":\n",
+    "\t\t\tlabel = 7\n",
+    "\t\tif label == \"irohas/\":\n",
+    "\t\t\tlabel = 8\n",
+    "\t\tif label == \"sprite/\":\n",
+    "\t\t\tlabel = 9\n",
+    "\t\tif label == \"tropicana/\":\n",
+    "\t\t\tlabel = 10\n",
+    "\t\tif label == \"wilkinson/\":\n",
+    "\t\t\tlabel = 11\n",
+    "\t\treturn label\t\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "NameError",
+     "evalue": "name 'train_dataset' is not defined",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[0;31mNameError\u001b[0m                                 Traceback (most recent call last)",
+      "\u001b[0;32m<ipython-input-4-e9a71ee0a2d5>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m()\u001b[0m\n\u001b[1;32m      2\u001b[0m \u001b[0;31m# DataLoaderを作成\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      3\u001b[0m train_dataloader = torch.utils.data.DataLoader(\n\u001b[0;32m----> 4\u001b[0;31m     train_dataset, batch_size=batch_size, shuffle=True)\n\u001b[0m\u001b[1;32m      5\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      6\u001b[0m val_dataloader = torch.utils.data.DataLoader(\n",
+      "\u001b[0;31mNameError\u001b[0m: name 'train_dataset' is not defined"
+     ]
+    }
+   ],
+   "source": [
+    "\n",
+    "# DataLoaderを作成\n",
+    "train_dataloader = torch.utils.data.DataLoader(\n",
+    "    train_dataset, batch_size=batch_size, shuffle=True)\n",
+    "\n",
+    "val_dataloader = torch.utils.data.DataLoader(\n",
+    "    val_dataset, batch_size=batch_size, shuffle=False)\n",
+    "\n",
+    "# 辞書型変数にまとめる\n",
+    "dataloaders_dict = {\"train\": train_dataloader, \"val\": val_dataloader}\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "NameError",
+     "evalue": "name 'dataloaders_dict' is not defined",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[0;31mNameError\u001b[0m                                 Traceback (most recent call last)",
+      "\u001b[0;32m<ipython-input-5-c0734c4b811c>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m()\u001b[0m\n\u001b[1;32m      1\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      2\u001b[0m \u001b[0;31m# 動作確認\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 3\u001b[0;31m \u001b[0mbatch_iterator\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0miter\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdataloaders_dict\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m\"train\"\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m)\u001b[0m  \u001b[0;31m# イテレータに変換\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m      4\u001b[0m \u001b[0minputs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mlabels\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mnext\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mbatch_iterator\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      5\u001b[0m \u001b[0minputs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mlabels\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mnext\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mbatch_iterator\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;31mNameError\u001b[0m: name 'dataloaders_dict' is not defined"
+     ]
+    }
+   ],
+   "source": [
+    "\n",
+    "# 動作確認\n",
+    "batch_iterator = iter(dataloaders_dict[\"train\"])  # イテレータに変換\n",
+    "inputs, labels = next(batch_iterator)\n",
+    "inputs, labels = next(batch_iterator)\n",
+    "print(inputs.size()) #batch_size,color,height,weight\n",
+    "print(labels)\n",
+    "\n",
+    "pd.DataFrame(val_list).to_csv(\"data/val.csv\",index=False,header=False)\n",
+    "pd.DataFrame(train_list).to_csv(\"data/train.csv\",index=False,header=False)\n",
+    "f = pd.read_csv(\"data/train.csv\")\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ]
+}

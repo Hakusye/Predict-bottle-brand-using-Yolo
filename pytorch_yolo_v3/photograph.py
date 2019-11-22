@@ -52,11 +52,11 @@ def write(x, img,net,transform):
     t_size = cv2.getTextSize(label, cv2.FONT_HERSHEY_PLAIN, 1 , 1)[0]
     color = random.choice(colors)
     cv2.rectangle(img, c1, c2,color, 1)
-    c2 = c1[0] + t_size[0] + 3, c1[1] + t_size[1] + 4
-    cv2.rectangle(img, c1, c2,color, -1)
+    #c2 = c1[0] + t_size[0] + 3, c1[1] + t_size[1] + 4
+    #cv2.rectangle(img, c1, c2,color, -1)
     img1 =  img[int(x[2]):int(x[4]),int(x[1]):int(x[3])]
-    label = predict_bottle(img1,net,transform)
-    cv2.putText(img, label, (c1[0], c1[1] + t_size[1] + 4), cv2.FONT_HERSHEY_PLAIN, 1, [225,255,255], 1)
+    #label = predict_bottle(img1,net,transform)
+    #cv2.putText(img, label, (c1[0], c1[1] + t_size[1] + 4), cv2.FONT_HERSHEY_PLAIN, 1, [225,255,255], 1)
     #cv2.putText(img, label, (c1[0], c1[1] + t_size[1]), cv2.FONT_HERSHEY_PLAIN, 1, [225,255,255], 1)
     return img
 
@@ -104,6 +104,7 @@ def arg_parse():
 
 if __name__ == '__main__':
     alr_train_path = "../bottle_predict/weights/ResNet50_batch32_epoch19.pth"
+    label_name = "namacha"
     net = models.resnet50(pretrained=False)
     net.fc = nn.Linear(2048,12)##ボトル4種類
     net = net.to("cuda")
@@ -191,12 +192,24 @@ if __name__ == '__main__':
             for i in range(output.shape[0]):
                 output[i, [1,3]] = torch.clamp(output[i, [1,3]], 0.0, im_dim[i,0])
                 output[i, [2,4]] = torch.clamp(output[i, [2,4]], 0.0, im_dim[i,1])
+            #print(output.shape)
+            clipped = [] #[img,class]
+            for i in range(len(output)):
+                cls = int(output[i][-1])
+                #label = "{0}".format(classes[cls])
+                clipped.append([orig_im[int(output[i][2]):int(output[i][4]),int(output[i][1]):int(output[i][3])],cls])
+            #clipped = orig_im[200:400,70:270]
+            #print(clipped)
             classes = load_classes('data/coco.names')
             colors = pkl.load(open("pallete", "rb"))
             ### 枠で囲うところ。最終的には付けたい
             list(map(lambda x: write(x, orig_im,net,transform), output))
             #print(im3)
             cv2.imshow("frame", orig_im)
+            for i in range(len(clipped)):
+                if(clipped[i][1] == 39):
+                    cv2.imwrite("../self_images/"+ label_name + "/" + str(clipped[i][1]) + "_" + str(cnt) + ".png",clipped[i][0])
+            #cv2.imshow("frame2", clipped)
             cnt+=1
             key = cv2.waitKey(1)
             if key & 0xFF == ord('q'):

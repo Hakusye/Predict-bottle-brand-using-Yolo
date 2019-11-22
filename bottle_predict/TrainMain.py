@@ -19,15 +19,19 @@ from MakeDataset import *
 #from Model import *
 from Transform import *
 from valMain import *
+from config import configurations
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(device)
-batch_size = 32
-size = 224
+#device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+config = configurations["config"]
+class_name = configurations["class_name"]
+rev_class_name = configurations["rev_class_name"]
+device = config["DEVICE"]
+batch_size = config["BATCH_SIZE"]
+size = config["IMAGE_SIZE"]
+mean = config["MEAN"]
+std = config["STD"]
+classes = config["CLASSES"]
 Stime = 0.0
-mean = (0.485, 0.456, 0.406)
-std = (0.229, 0.224, 0.225)
-classes = 12
 #val_list,train_list = make_datapath_list()
 train_list = []
 val_list = []
@@ -54,8 +58,8 @@ model.fc = nn.Linear(2048,classes)
 #alr_train_path = "weights/ResNet50_batch64_epoch50.pth"
 
 criterion = nn.CrossEntropyLoss()
-optimizer = optimizer.SGD(model.parameters(),lr=0.003)
-MAX_EPOCH=20
+optimizer = optimizer.SGD(model.parameters(),lr=config["WEIGHT_DECAY"])
+MAX_EPOCH=config["MAX_EPOCH"]
 model.to(device)
 model.train()
 #torch.backends.cudnn.benchmark = True
@@ -75,15 +79,15 @@ for epoch in range(MAX_EPOCH):
 		loss.backward()
 		optimizer.step()
 		running_loss += loss.item()
-		if cnt % 15 == 14:
+		#if cnt % 30 == 29:
 		#定数のとこをtrain.sizeとかでまとめたい
-			print('['+ str(epoch)+',' + str(i+1) + ']  ' + str(running_loss))
-			print("time:"+str(time.time()-Stime))
-			Stime = time.time()
-			running_loss = 0.
-			#Accuracy(model,val_data_loader,device,batch_size)
-		if(cnt == 10):
+		#	print('['+ str(epoch)+',' + str(i+1) + ']  ' + str(running_loss))
+		#	print("time:"+str(time.time()-Stime))
+		#	Stime = time.time()
+		#	running_loss = 0.
+		if(cnt % 30 == 29):
 			cnt=0
+			Accuracy(model,val_data_loader ,device,batch_size)
 			print('savefile:' + 'weights/ResNet50_batch' + str(batch_size) + '_epoch' + str(epoch) + '.pth')
 			torch.save(model.state_dict(),'weights/ResNet50_batch'+ str(batch_size) + '_epoch' + str(epoch) + '.pth')
 
@@ -91,4 +95,3 @@ print('savefile:' + 'weights/ResNet50_batch' + str(batch_size) + '_epoch' + str(
 torch.save(model.state_dict(),'weights/ResNet50_batch'+ str(batch_size) + '_epoch' + str(epoch) + '.pth')
 
 print("val")
-#Accuracy(model,val_data_loder,device)
