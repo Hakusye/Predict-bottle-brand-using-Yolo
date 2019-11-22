@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 #%matplotlib inline
 
+from config import configurations
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -44,6 +45,8 @@ class Dataset():
 		self.file_list = file_list  # ファイルパスのリスト
 		self.transform = transform  # 前処理クラスのインスタンス
 		self.phase = phase  # train or valの指定
+		self.config = configurations["config"]
+		self.classes = configurations["class_name"]
 
 	def __len__(self):
 		return len(self.file_list)
@@ -54,47 +57,18 @@ class Dataset():
 		#中の計算部分は貼る位置のピクセル調整。あまり気にしなくて良い
 		img_transformed = self.transform(img, self.phase)  # torch.Size([3, 224, 224])
 		label = img_path.split("/")
-		#label = img_path[3:18]
-		#label = re.findall('.*?(\d+).*',label)
-		label = label[2]
-		#print(label)
-		label = self.make_label(label)
+		label = self.classes[label[2]]
 		
 		return img_transformed, label
 
-	def make_label(self,label):
-		if label == "aquarius":
-			label = 0
-		if label == "ayataka_brown_rice":
-			label = 1
-		if label == "calpis":
-			label = 2
-		if label == "craft_boss_black":
-			label = 3
-		if label == "craft_boss_latte":
-			label = 4
-		if label == "crystal_geyser":
-			label = 5
-		if label == "fresh_tea":
-			label = 6
-		if label == "green_dakara":
-			label = 7
-		if label == "irohas":
-			label = 8
-		if label == "sprite":
-			label = 9
-		if label == "tropicana":
-			label = 10
-		if label == "wilkinson":
-			label = 11
-		return label	
-
 if __name__ == "__main__":
-	batch_size = 32
-	size = 224
-	mean = (0.485, 0.456, 0.406)
-	std = (0.229, 0.224, 0.225)
-	classes = 4
+	config = configurations["config"]
+	class_name = configurations["class_name"]
+	batch_size = config["BATCH_SIZE"]
+	size = config["IMAGE_SIZE"]
+	mean = config["MEAN"]
+	std = config["STD"]
+	classes = config["CLASSES"]
 
 	val_list,train_list = make_datapath_list()
 
