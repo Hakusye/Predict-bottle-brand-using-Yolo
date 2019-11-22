@@ -6,7 +6,9 @@ from pprint import pprint
 import glob
 images_dir = configurations["config"]["ROOT_IMAGES_PATH"]
 target_path = osp.join(images_dir + "*/")
-#pprint(target_path)
+#target_path = osp.join(images_dir + '*/*' + configurations["config"]["EXT"])
+#for i in glob.glob(target_path):
+#	print(i)
 for images_dir in glob.glob(target_path):
     p = Augmentor.Pipeline(images_dir)
     p.random_distortion(probability=1, grid_width=4, grid_height=4, magnitude=5)

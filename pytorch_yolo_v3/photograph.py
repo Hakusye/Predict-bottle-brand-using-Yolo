@@ -88,7 +88,7 @@ def arg_parse():
 
 
 if __name__ == '__main__':
-    label_name = "iemon"
+    label_name = "aquarius"
     cnt = 0
     args = arg_parse()
     confidence = float(args.confidence)

@@ -2,7 +2,7 @@ configurations = {
     "config":{
     "SEED" : 1234,
     "DATA_LOOT" : "/",
-    "ROOT_IMAGES_PATH":"../self_images/",
+    "ROOT_IMAGES_PATH":"/home/deepstation/Shirae/MYolo/self_images/",
     "EXT":"png",
     "BATCH_SIZE" : 32,
     "IMAGE_SIZE" : 224,

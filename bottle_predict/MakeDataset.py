@@ -30,9 +30,15 @@ class DistancePredictor():
 
 def make_datapath_list():
 	rootpath =  configurations["config"]["ROOT_IMAGES_PATH"]
-	target_path = osp.join(rootpath + '*/*.' + configurations["config"]["EXT"])
+	target_path = osp.join(rootpath + '*/*' + configurations["config"]["EXT"])
 	val_list = []
 	train_list = []
+	for path in glob.glob(target_path):
+		if(random.random() < 0.15):
+			val_list.append(path)
+		else:
+			train_list.append(path)
+	target_path = osp.join(rootpath + '*/output/*' + configurations["config"]["EXT"])
 	for path in glob.glob(target_path):
 		if(random.random() < 0.15):
 			val_list.append(path)
@@ -57,7 +63,7 @@ class Dataset():
 		#中の計算部分は貼る位置のピクセル調整。あまり気にしなくて良い
 		img_transformed = self.transform(img, self.phase)  # torch.Size([3, 224, 224])
 		label = img_path.split("/")
-		label = self.classes[label[2]]
+		label = self.classes[label[6]]
 		
 		return img_transformed, label
 

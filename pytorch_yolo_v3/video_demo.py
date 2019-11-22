@@ -106,7 +106,7 @@ def arg_parse():
 
 
 if __name__ == '__main__':
-    alr_train_path = "../bottle_predict/weights/ResNet50_batch32_epoch29.pth"
+    alr_train_path = "../bottle_predict/weights/ResNet50_batch32_epoch6.pth"
     net = models.resnet50(pretrained=False)
     net.fc = nn.Linear(2048,16)##ボトル2種類
     net = net.to("cuda")
