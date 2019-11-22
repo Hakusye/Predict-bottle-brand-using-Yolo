@@ -29,8 +29,8 @@ class DistancePredictor():
 		return predicter_label_name
 
 def make_datapath_list():
-	rootpath = "../images/"
-	target_path = osp.join(rootpath + '*/*.jpg')
+	rootpath =  configurations["config"]["ROOT_IMAGES_PATH"]
+	target_path = osp.join(rootpath + '*/*.' + configurations["config"]["EXT"])
 	val_list = []
 	train_list = []
 	for path in glob.glob(target_path):
@@ -77,7 +77,7 @@ if __name__ == "__main__":
 
 	val_dataset = Dataset(
 		file_list=val_list, transform=ImageTransform(size, mean, std), phase='val')
-	index = 1
+	index = 0
 	print(train_dataset.__getitem__(index)[0].size())
 	print(train_dataset.__getitem__(index)[1])
 

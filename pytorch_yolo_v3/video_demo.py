@@ -14,6 +14,7 @@ import random
 import pickle as pkl
 import argparse
 from PIL import Image
+
 #import tensorflow as tf
 class BaseTransform():
     def __init__(self,resize,mean,std):
@@ -62,9 +63,11 @@ def write(x, img,net,transform):
 
 ### 飲み物の画像分類
 def predict_bottle(img,net,transform):
-    label = ["aquarius","ayataka_brown_rice","calpis","boss_black",
-            "boss_latte","crystal_geyser","fresh_tea","green_dakara",
-            "irohas","sprite","tropicana","wilkinson"]
+    #label = ["aquarius","ayataka_brown_rice","calpis","boss_black",
+    #        "boss_latte","crystal_geyser","fresh_tea","green_dakara",
+    #        "irohas","sprite","tropicana","wilkinson"]
+    label = ["koicha","ayataka_brown","calpis","namacha","natural_green",
+    "irohas","gogo_tea","tropicana","ooi_ochaa","coca_cola","ayataka","dekavita","pokari","iemon","genmai","koicha"]
     net = net.to("cuda")
     net.eval()
     #img = torch.from_numpy(img)
@@ -103,9 +106,9 @@ def arg_parse():
 
 
 if __name__ == '__main__':
-    alr_train_path = "../bottle_predict/weights/ResNet50_batch32_epoch19.pth"
+    alr_train_path = "../bottle_predict/weights/ResNet50_batch32_epoch29.pth"
     net = models.resnet50(pretrained=False)
-    net.fc = nn.Linear(2048,12)##ボトル4種類
+    net.fc = nn.Linear(2048,16)##ボトル2種類
     net = net.to("cuda")
     net.load_state_dict(torch.load(alr_train_path))
     cnt = 0
