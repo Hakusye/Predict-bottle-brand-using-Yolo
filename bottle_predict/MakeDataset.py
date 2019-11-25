@@ -1,5 +1,5 @@
 ##Datasetの他にリスト生成したりするとこ
-### 10/1多分完成
+### 任意の数（同確率）のリストを生成することに成功
 import glob
 import os.path as osp
 import random
@@ -28,23 +28,19 @@ class DistancePredictor():
 		predicter_label_name = self.class_index[str(maxid)][0]
 		return predicter_label_name
 
-def make_datapath_list():
+def make_datapath_list(classes=2):
 	rootpath =  configurations["config"]["ROOT_IMAGES_PATH"]
 	target_path = osp.join(rootpath + '*/*' + configurations["config"]["EXT"])
-	val_list = []
-	train_list = []
+	class_list =[[] for i in range(classes)]
+	
 	for path in glob.glob(target_path):
-		if(random.random() < 0.15):
-			val_list.append(path)
-		else:
-			train_list.append(path)
+		class_list[int(random.random()*classes)].append(path)
+	
 	target_path = osp.join(rootpath + '*/output/*' + configurations["config"]["EXT"])
 	for path in glob.glob(target_path):
-		if(random.random() < 0.15):
-			val_list.append(path)
-		else:
-			train_list.append(path)
-	return val_list, train_list
+		class_list[int(random.random()*classes)].append(path)
+	
+	return class_list
 
 class Dataset():
 	def __init__(self, file_list, transform=None, phase='train'):
@@ -75,35 +71,44 @@ if __name__ == "__main__":
 	mean = config["MEAN"]
 	std = config["STD"]
 	classes = config["CLASSES"]
-
-	val_list,train_list = make_datapath_list()
-
+	cross_classes = config["CROSS_CLASSES"]
+	class_list = make_datapath_list(cross_classes)
+	class_dataset = []
+	class_dataloader = []
+	
+	for row in class_list:
+		class_dataset.append(Dataset(
+			file_list=row, transform=ImageTransform(size, mean, std), phase='train'))
+	'''
 	train_dataset = Dataset(
 		file_list=train_list, transform=ImageTransform(size, mean, std), phase='train')
 
 	val_dataset = Dataset(
 		file_list=val_list, transform=ImageTransform(size, mean, std), phase='val')
+	'''
 	index = 0
-	print(train_dataset.__getitem__(index)[0].size())
-	print(train_dataset.__getitem__(index)[1])
+	print(class_dataset[0].__getitem__(index)[0].size())
+	print(class_dataset[0].__getitem__(index)[1])
 
 # DataLoaderを作成
-	train_dataloader = torch.utils.data.DataLoader(
-		train_dataset, batch_size=batch_size, shuffle=True)
-
-	val_dataloader = torch.utils.data.DataLoader(
-		val_dataset, batch_size=batch_size, shuffle=False)
-
-# 辞書型変数にまとめる
-	dataloaders_dict = {"train": train_dataloader, "val": val_dataloader}
-
-# 動作確認
-	batch_iterator = iter(dataloaders_dict["train"])  # イテレータに変換
-	inputs, labels = next(batch_iterator)
-	inputs, labels = next(batch_iterator)
-	print(inputs.size()) #batch_size,color,height,weight
-	print(labels)
-
-	pd.DataFrame(val_list).to_csv("data/val.csv",index=False,header=False)
-	pd.DataFrame(train_list).to_csv("data/train.csv",index=False,header=False)
-	f = pd.read_csv("data/train.csv")
+	
+	for row in class_dataset:
+		class_dataloader.append(torch.utils.data.DataLoader(
+			row, batch_size=batch_size, shuffle=True))
+		'''
+		train_dataloader = torch.utils.data.DataLoader(
+			train_dataset, batch_size=batch_size, shuffle=True)
+	
+		val_dataloader = torch.utils.data.DataLoader(
+			val_dataset, batch_size=batch_size, shuffle=False)
+		'''
+	# 動作確認
+		batch_iterator = iter(class_dataloader[0])  # イテレータに変換
+		inputs, labels = next(batch_iterator)
+		inputs, labels = next(batch_iterator)
+		print(inputs.size()) #batch_size,color,height,weight
+		print(labels)
+		for i,row in enumerate(class_list):
+			pd.DataFrame(row).to_csv("data/"+str(i)+".csv",index=False,header=False)
+		f = pd.read_csv("data/0.csv")
+	

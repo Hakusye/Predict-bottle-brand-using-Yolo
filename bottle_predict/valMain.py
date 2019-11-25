@@ -20,7 +20,6 @@ from MakeDataset import *
 from Transform import *
 
 def Accuracy(model,val_data_loader,device,batch_size):
-	di = [0 for i in range(41)]
 	model.to(device)
 	model.eval()
 	count_when_correct = 0

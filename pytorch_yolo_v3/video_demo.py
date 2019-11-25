@@ -14,6 +14,7 @@ import random
 import pickle as pkl
 import argparse
 from PIL import Image
+import haming
 
 #import tensorflow as tf
 class BaseTransform():
@@ -42,7 +43,8 @@ def get_test_input(input_dim, CUDA):
     return img_
 
 ### ここに書き込処理が書いてある!
-def write(x, img,net,transform):
+def write(x,img,transform):
+#def write(x, img,net,transform):
     c1 = tuple(x[1:3].int())
     c2 = tuple(x[3:5].int())
     cls = int(x[-1])
@@ -56,18 +58,29 @@ def write(x, img,net,transform):
     c2 = c1[0] + t_size[0] + 3, c1[1] + t_size[1] + 4
     cv2.rectangle(img, c1, c2,color, -1)
     img1 =  img[int(x[2]):int(x[4]),int(x[1]):int(x[3])]
-    label = predict_bottle(img1,net,transform)
+    #label = cnn_predict_bottle(img1,net,transform)
+    label  = haming_predict_bottle(img1)
     cv2.putText(img, label, (c1[0], c1[1] + t_size[1] + 4), cv2.FONT_HERSHEY_PLAIN, 1, [225,255,255], 1)
     #cv2.putText(img, label, (c1[0], c1[1] + t_size[1]), cv2.FONT_HERSHEY_PLAIN, 1, [225,255,255], 1)
     return img
 
-### 飲み物の画像分類
-def predict_bottle(img,net,transform):
-    #label = ["aquarius","ayataka_brown_rice","calpis","boss_black",
-    #        "boss_latte","crystal_geyser","fresh_tea","green_dakara",
-    #        "irohas","sprite","tropicana","wilkinson"]
+### haming距離による画像分類
+def haming_predict_bottle(img):
+    img = img[:,:,::-1].copy()
+    img = Image.fromarray(img)
+    ans_path,result = haming.haming(img)
+    label = ans_path.split("/")
+    label = label[6][:-4]
+    return label
+
+
+
+### cnnの飲み物の画像分類
+def cnn_predict_bottle(img,net,transform):
     label = ["koicha","ayataka_brown","calpis","namacha","natural_green",
-    "irohas","gogo_tea","tropicana","ooi_ochaa","coca_cola","ayataka","dekavita","pokari","iemon","genmai","koicha"]
+            "tropicana","ooi_ochaa","coca_cola","ayataka","dekavita",
+            "pokari","iemon","genmai","koicha"]
+    
     net = net.to("cuda")
     net.eval()
     #img = torch.from_numpy(img)
@@ -79,12 +92,7 @@ def predict_bottle(img,net,transform):
     return label[predicted]
 
 def arg_parse():
-    """
-    Parse arguements to the detect module
-    
-    """
-    
-    
+    #Parse arguements to the detect module
     parser = argparse.ArgumentParser(description='YOLO v3 Video Detection Module')
    
     parser.add_argument("--video", dest = 'video', help = 
@@ -106,11 +114,11 @@ def arg_parse():
 
 
 if __name__ == '__main__':
-    alr_train_path = "../bottle_predict/weights/ResNet50_batch32_epoch6.pth"
-    net = models.resnet50(pretrained=False)
-    net.fc = nn.Linear(2048,16)##ボトル2種類
-    net = net.to("cuda")
-    net.load_state_dict(torch.load(alr_train_path))
+    #alr_train_path = "../bottle_predict/weights/ResNet50_batch32_epoch4.pth"
+    #net = models.resnet50(pretrained=False)
+    #net.fc = nn.Linear(2048,16)##ボトル2種類
+    #net = net.to("cuda")
+    #net.load_state_dict(torch.load(alr_train_path))
     cnt = 0
     args = arg_parse()
     confidence = float(args.confidence)
@@ -118,11 +126,7 @@ if __name__ == '__main__':
     start = 0
     transform = BaseTransform(224,(0.485,0.456,0.406),(0.229,0.224,0.225))
     CUDA = torch.cuda.is_available()
-
     num_classes = 80
-
-#    CUDA = torch.cuda.is_available()
-    
     bbox_attrs = 5 + num_classes
     
     print("Loading network.....")
@@ -179,9 +183,6 @@ if __name__ == '__main__':
                     break
                 continue
             
-            
-
-            
             #orig_im = cv2.resize(orig_im,(int(orig_im.shape[1]/2),int(orig_im.shape[0]/2)))
             im_dim = im_dim.repeat(output.size(0), 1)
             scaling_factor = torch.min(inp_dim/im_dim,1)[0].view(-1,1)
@@ -197,7 +198,8 @@ if __name__ == '__main__':
             classes = load_classes('data/coco.names')
             colors = pkl.load(open("pallete", "rb"))
             ### 枠で囲うところ。最終的には付けたい
-            list(map(lambda x: write(x, orig_im,net,transform), output))
+            #list(map(lambda x: write(x, orig_im,net,transform), output))
+            list(map(lambda x: write(x, orig_im,transform), output))
             #print(im3)
             cv2.imshow("frame", orig_im)
             cnt+=1
