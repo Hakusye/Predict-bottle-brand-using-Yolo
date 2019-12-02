@@ -19,8 +19,7 @@ import sys,os
 sys.path.append(os.path.join(os.path.dirname(__file__),'..'))
 from config import configurations
 from bottle_predict.Transform import *
-#from bottle_predict.Transform import *
-
+import attach_label
 #import tensorflow as tf
 
 def get_test_input(input_dim, CUDA):
@@ -52,34 +51,12 @@ def write(x, img,net,transform):
     c2 = c1[0] + t_size[0] + 3, c1[1] + t_size[1] + 4
     cv2.rectangle(img, c1, c2,color, -1)
     img1 =  img[int(x[2]):int(x[4]),int(x[1]):int(x[3])]
-    label = cnn_predict_bottle(img1,net,transform)
-    #label  = haming_predict_bottle(img1)
+    label = attach_label.cnn_predict_bottle(img1,net,transform)
+    #label  = attach_label.haming_predict_bottle(img1)
     cv2.putText(img, label, (c1[0], c1[1] + t_size[1] + 4), cv2.FONT_HERSHEY_PLAIN, 1, [225,255,255], 1)
     return img
 
 ### haming距離による画像分類
-def haming_predict_bottle(img):
-    img = img[:,:,::-1].copy()
-    img = Image.fromarray(img)
-    ans_path,result = haming.haming(img)
-    label = ans_path.split("/")
-    label = label[6][:-4]
-    return label
-
-### cnnの飲み物の画像分類
-def cnn_predict_bottle(img,net,transform):
-    label = configurations["rev_class_name"]
-    size = configurations["config"]["IMAGE_SIZE"]
-    net = net.to("cuda")
-    net.eval()
-    #img = torch.from_numpy(img)
-    img = Image.fromarray(np.uint8(img))
-    img = transform(img).unsqueeze_(0)
-    img = img.to("cuda")
-    results = net(img).to("cuda")
-    per, predicted = torch.max(results.data, 1)
-    return label[predicted]
-
 def arg_parse():
     #Parse arguements to the detect module
     parser = argparse.ArgumentParser(description='YOLO v3 Video Detection Module')

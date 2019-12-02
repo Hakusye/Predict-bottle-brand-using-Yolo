@@ -41,6 +41,7 @@ def cnn_predict_bottle(img,net,transform):
     net = net.to("cuda")
     net.eval()
     #img = torch.from_numpy(img)
+    img = img[:,:,::-1].copy()
     img = Image.fromarray(np.uint8(img))
     img = transform(img).unsqueeze_(0)
     img = img.to("cuda")
