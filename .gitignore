@@ -98,9 +98,10 @@ bottle_predict/weights
 images/
 
 chromedriver
-bottole_predict/data/
+bottle_predict/data/
 datas/*.csv
 pytorch_yolo_v3/imgs/
 pytorch_yolo_v3/yolov3.weights
 self_images/
+self_images_val/
 haming_images/
