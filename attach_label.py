@@ -47,4 +47,4 @@ def cnn_predict_bottle(img,net,transform):
     img = img.to("cuda")
     results = net(img).to("cuda")
     per, predicted = torch.max(results.data, 1)
-    return label[predicted]
+    return label[predicted],predicted

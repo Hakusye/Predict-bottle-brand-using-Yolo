@@ -20,6 +20,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__),'..'))
 from config import configurations
 from bottle_predict.Transform import *
 import attach_label
+from read_aloud.jtalk import jtalk
 #import tensorflow as tf
 
 def get_test_input(input_dim, CUDA):
@@ -43,7 +44,7 @@ def write(x, img,net,transform):
     cls = int(x[-1])
     #print(cls)
     if(cls != 39):
-        return img
+        return ""
     label = "{0}".format(classes[cls])
     t_size = cv2.getTextSize(label, cv2.FONT_HERSHEY_PLAIN, 1 , 1)[0]
     color = random.choice(colors)
@@ -51,10 +52,10 @@ def write(x, img,net,transform):
     c2 = c1[0] + t_size[0] + 3, c1[1] + t_size[1] + 4
     cv2.rectangle(img, c1, c2,color, -1)
     img1 =  img[int(x[2]):int(x[4]),int(x[1]):int(x[3])]
-    label = attach_label.cnn_predict_bottle(img1,net,transform)
-    #label  = attach_label.haming_predict_bottle(img1)
+    label,num = attach_label.cnn_predict_bottle(img1,net,transform)
+    label_num = configurations["japanese_reading"][num]+'、'
     cv2.putText(img, label, (c1[0], c1[1] + t_size[1] + 4), cv2.FONT_HERSHEY_PLAIN, 1, [225,255,255], 1)
-    return img
+    return label_num
 
 ### haming距離による画像分類
 def arg_parse():
@@ -126,7 +127,7 @@ if __name__ == '__main__':
     frames = 0
     start = time.time()    
     while cap.isOpened():
-         
+        SpeakOut = False
         ret, frame = cap.read()
         if ret:
             img, orig_im, dim = prep_image(frame, inp_dim)
@@ -163,8 +164,11 @@ if __name__ == '__main__':
                 output[i, [2,4]] = torch.clamp(output[i, [2,4]], 0.0, im_dim[i,1])
             classes = load_classes('data/coco.names')
             colors = pkl.load(open("pallete", "rb"))
-            ### 枠で囲うところ。最終的には付けたい
-            list(map(lambda x: write(x, orig_im,net,transform), output))
+            
+            sound = ''.join(list(map(lambda x: write(x, orig_im,net,transform), output)))
+            if(cnt % 70 == 0 and sound != ''):
+                sound += "です。"
+                jtalk(sound) 
             #list(map(lambda x: write(x, orig_im,transform), output))
             cv2.imshow("frame", orig_im)
             cnt+=1
