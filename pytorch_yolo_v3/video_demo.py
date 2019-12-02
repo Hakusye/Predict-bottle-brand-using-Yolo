@@ -82,7 +82,7 @@ def arg_parse():
 
 if __name__ == '__main__':
     
-    alr_train_path = "../bottle_predict/weights/ResNet50_classes14_epoch6.pth"
+    alr_train_path = "../weights/ResNet50_classes14_epoch6.pth"
     net = models.resnet50(pretrained=False)
     config = configurations["config"]
     net.fc = nn.Linear(2048,config["CLASSES"])##ボトル2種類
