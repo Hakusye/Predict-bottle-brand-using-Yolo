@@ -15,19 +15,13 @@ import pickle as pkl
 import argparse
 from PIL import Image
 import haming
+import sys,os
+sys.path.append(os.path.join(os.path.dirname(__file__),'..'))
+from config import configurations
+from bottle_predict.Transform import *
+#from bottle_predict.Transform import *
 
 #import tensorflow as tf
-class BaseTransform():
-    def __init__(self,resize,mean,std):
-        self.base_transform = transforms.Compose([
-            transforms.Resize(resize),
-            transforms.CenterCrop(resize),
-            transforms.ToTensor(),
-            transforms.Normalize(mean,std)
-        ])
-    def __call__(self,img):
-        return self.base_transform(img)
-
 
 def get_test_input(input_dim, CUDA):
     img = cv2.imread("dog-cycle-car.png")
@@ -43,8 +37,8 @@ def get_test_input(input_dim, CUDA):
     return img_
 
 ### ここに書き込処理が書いてある!
-def write(x,img,transform):
-#def write(x, img,net,transform):
+#def write(x,img,transform):
+def write(x, img,net,transform):
     c1 = tuple(x[1:3].int())
     c2 = tuple(x[3:5].int())
     cls = int(x[-1])
@@ -58,10 +52,9 @@ def write(x,img,transform):
     c2 = c1[0] + t_size[0] + 3, c1[1] + t_size[1] + 4
     cv2.rectangle(img, c1, c2,color, -1)
     img1 =  img[int(x[2]):int(x[4]),int(x[1]):int(x[3])]
-    #label = cnn_predict_bottle(img1,net,transform)
-    label  = haming_predict_bottle(img1)
+    label = cnn_predict_bottle(img1,net,transform)
+    #label  = haming_predict_bottle(img1)
     cv2.putText(img, label, (c1[0], c1[1] + t_size[1] + 4), cv2.FONT_HERSHEY_PLAIN, 1, [225,255,255], 1)
-    #cv2.putText(img, label, (c1[0], c1[1] + t_size[1]), cv2.FONT_HERSHEY_PLAIN, 1, [225,255,255], 1)
     return img
 
 ### haming距離による画像分類
@@ -73,14 +66,10 @@ def haming_predict_bottle(img):
     label = label[6][:-4]
     return label
 
-
-
 ### cnnの飲み物の画像分類
 def cnn_predict_bottle(img,net,transform):
-    label = ["koicha","ayataka_brown","calpis","namacha","natural_green",
-            "tropicana","ooi_ochaa","coca_cola","ayataka","dekavita",
-            "pokari","iemon","genmai","koicha"]
-    
+    label = configurations["rev_class_name"]
+    size = configurations["config"]["IMAGE_SIZE"]
     net = net.to("cuda")
     net.eval()
     #img = torch.from_numpy(img)
@@ -88,7 +77,7 @@ def cnn_predict_bottle(img,net,transform):
     img = transform(img).unsqueeze_(0)
     img = img.to("cuda")
     results = net(img).to("cuda")
-    _, predicted = torch.max(results.data, 1)
+    per, predicted = torch.max(results.data, 1)
     return label[predicted]
 
 def arg_parse():
@@ -114,17 +103,21 @@ def arg_parse():
 
 
 if __name__ == '__main__':
-    #alr_train_path = "../bottle_predict/weights/ResNet50_batch32_epoch4.pth"
-    #net = models.resnet50(pretrained=False)
-    #net.fc = nn.Linear(2048,16)##ボトル2種類
-    #net = net.to("cuda")
-    #net.load_state_dict(torch.load(alr_train_path))
+    
+    alr_train_path = "../bottle_predict/weights/ResNet50_classes14_epoch6.pth"
+    net = models.resnet50(pretrained=False)
+    config = configurations["config"]
+    net.fc = nn.Linear(2048,config["CLASSES"])##ボトル2種類
+    net = net.to("cuda")
+    net.load_state_dict(torch.load(alr_train_path))
+    
     cnt = 0
     args = arg_parse()
     confidence = float(args.confidence)
     nms_thesh = float(args.nms_thresh)
     start = 0
-    transform = BaseTransform(224,(0.485,0.456,0.406),(0.229,0.224,0.225))
+    #transform = BaseTransform(224,(0.485,0.456,0.406),(0.229,0.224,0.225))
+    transform = BaseTransform(config["IMAGE_SIZE"],config["MEAN"],config["STD"])
     CUDA = torch.cuda.is_available()
     num_classes = 80
     bbox_attrs = 5 + num_classes
@@ -151,9 +144,6 @@ if __name__ == '__main__':
 
     model.eval()
     
-   # videofile = args.video
-    
-  #  cap = cv2.VideoCapture(videofile)
     assert cap.isOpened(), 'Cannot capture source'
     
     frames = 0
@@ -183,7 +173,6 @@ if __name__ == '__main__':
                     break
                 continue
             
-            #orig_im = cv2.resize(orig_im,(int(orig_im.shape[1]/2),int(orig_im.shape[0]/2)))
             im_dim = im_dim.repeat(output.size(0), 1)
             scaling_factor = torch.min(inp_dim/im_dim,1)[0].view(-1,1)
             
@@ -198,9 +187,8 @@ if __name__ == '__main__':
             classes = load_classes('data/coco.names')
             colors = pkl.load(open("pallete", "rb"))
             ### 枠で囲うところ。最終的には付けたい
-            #list(map(lambda x: write(x, orig_im,net,transform), output))
-            list(map(lambda x: write(x, orig_im,transform), output))
-            #print(im3)
+            list(map(lambda x: write(x, orig_im,net,transform), output))
+            #list(map(lambda x: write(x, orig_im,transform), output))
             cv2.imshow("frame", orig_im)
             cnt+=1
             key = cv2.waitKey(1)

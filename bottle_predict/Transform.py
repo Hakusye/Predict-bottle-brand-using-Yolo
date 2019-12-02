@@ -30,7 +30,7 @@ class ImageTransform():
 		self.data_transform = {
 		'train': transforms.Compose([
 		transforms.RandomResizedCrop(
-					resize, scale=(0.5, 1.0)),  
+					resize, scale=(1.0, 1.0)),  
 					transforms.RandomHorizontalFlip(), 
 					transforms.ToTensor(),  
 					transforms.Normalize(mean, std) 

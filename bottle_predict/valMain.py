@@ -33,6 +33,7 @@ def Accuracy(model,val_data_loader,device,batch_size):
 		count_when_correct += (predicted == val_labels).sum()
 	print('正解率：%d / %d = %f'% (count_when_correct, total, int(count_when_correct)/int(total)))
 	model.train()
+	return int(count_when_correct)/int(total)
 
 if __name__ == "__main__":
 	config = configurations["config"]

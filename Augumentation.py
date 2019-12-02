@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import Augmentor
-from bottle_predict.config import configurations
+from config import configurations
 import os.path as osp
 from pprint import pprint
 import glob

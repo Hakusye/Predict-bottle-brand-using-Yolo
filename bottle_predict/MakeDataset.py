@@ -10,7 +10,8 @@ from PIL import Image
 import matplotlib.pyplot as plt
 import pandas as pd
 #%matplotlib inline
-
+import sys,os 
+sys.path.append(os.path.join(os.path.dirname(__file__),'..'))
 from config import configurations
 import torch
 import torch.nn as nn
@@ -30,15 +31,20 @@ class DistancePredictor():
 
 def make_datapath_list(classes=2):
 	rootpath =  configurations["config"]["ROOT_IMAGES_PATH"]
+	rootpath_val =  configurations["config"]["ROOT_IMAGES_PATH_VAL"]
 	target_path = osp.join(rootpath + '*/*' + configurations["config"]["EXT"])
-	class_list =[[] for i in range(classes)]
+	target_path_val = osp.join(rootpath + '*/*' + configurations["config"]["EXT"])
+	class_list =[[] for i in range(classes+1)]
 	
 	for path in glob.glob(target_path):
-		class_list[int(random.random()*classes)].append(path)
+		class_list[int(random.random()*classes)+1].append(path)
+
+	for path in glob.glob(target_path_val):
+		class_list[0].append(path)
 	
 	target_path = osp.join(rootpath + '*/output/*' + configurations["config"]["EXT"])
 	for path in glob.glob(target_path):
-		class_list[int(random.random()*classes)].append(path)
+		class_list[int(random.random()*classes)+1].append(path)
 	
 	return class_list
 
@@ -79,13 +85,6 @@ if __name__ == "__main__":
 	for row in class_list:
 		class_dataset.append(Dataset(
 			file_list=row, transform=ImageTransform(size, mean, std), phase='train'))
-	'''
-	train_dataset = Dataset(
-		file_list=train_list, transform=ImageTransform(size, mean, std), phase='train')
-
-	val_dataset = Dataset(
-		file_list=val_list, transform=ImageTransform(size, mean, std), phase='val')
-	'''
 	index = 0
 	print(class_dataset[0].__getitem__(index)[0].size())
 	print(class_dataset[0].__getitem__(index)[1])
@@ -95,13 +94,6 @@ if __name__ == "__main__":
 	for row in class_dataset:
 		class_dataloader.append(torch.utils.data.DataLoader(
 			row, batch_size=batch_size, shuffle=True))
-		'''
-		train_dataloader = torch.utils.data.DataLoader(
-			train_dataset, batch_size=batch_size, shuffle=True)
-	
-		val_dataloader = torch.utils.data.DataLoader(
-			val_dataset, batch_size=batch_size, shuffle=False)
-		'''
 	# 動作確認
 		batch_iterator = iter(class_dataloader[0])  # イテレータに変換
 		inputs, labels = next(batch_iterator)

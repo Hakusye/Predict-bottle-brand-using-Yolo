@@ -88,7 +88,7 @@ def arg_parse():
 
 
 if __name__ == '__main__':
-    label_name = "aquarius"
+    label_name = "natural_green"
     cnt = 0
     args = arg_parse()
     confidence = float(args.confidence)
@@ -188,7 +188,7 @@ if __name__ == '__main__':
             cv2.imshow("frame", orig_im)
             for i in range(len(clipped)):
                 if(clipped[i][1] == 39):
-                    cv2.imwrite("../self_images/"+ label_name + "/" + str(clipped[i][1]) + "_" + str(cnt) + ".png",clipped[i][0])
+                    cv2.imwrite("../self_images_val/"+ label_name + "/" + str(clipped[i][1]) + "_" + str(cnt) + ".png",clipped[i][0])
             #cv2.imshow("frame2", clipped)
             cnt+=1
             key = cv2.waitKey(1)
