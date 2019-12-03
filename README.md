@@ -11,6 +11,12 @@ $ unzip ./MMDAgent_Example-1.7.zip
 $ sudo cp -R ./MMDAgent_Example-1.7/Voice/mei /usr/share/hts-voice/
 
 ```
+yoloの学習済みデータダウンロード
+```
+$ cd pytorch_yolo_v3
+$ wget https://pjreddie.com/media/files/yolov3.weights
+
+```
 
 ## 使い方
 pytorh_yolo_v3/video_demo.py をpython3系で実行
