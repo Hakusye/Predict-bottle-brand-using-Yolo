@@ -81,7 +81,9 @@ def arg_parse():
 
 
 if __name__ == '__main__':
-    
+    if not torch.cuda.is_available():
+        print("GPUが使えません")
+        sys.exit()
     alr_train_path = "../weights/ResNet50_classes14_epoch6.pth"
     net = models.resnet50(pretrained=False)
     config = configurations["config"]
@@ -110,7 +112,7 @@ if __name__ == '__main__':
     assert inp_dim % 32 == 0 
     assert inp_dim > 32
     cap = cv2.VideoCapture(0)
-    if(cap.isOpened() and cv2.cuda.getCudaEnabledDeviceCount()):
+    if(cap.isOpened()): #and cv2.cuda.getCudaEnabledDeviceCount()):
         print("Gpu")
     else:
         print("No Gpu")
@@ -125,7 +127,7 @@ if __name__ == '__main__':
     assert cap.isOpened(), 'Cannot capture source'
     
     frames = 0
-    start = time.time()    
+    start = time.time()
     while cap.isOpened():
         SpeakOut = False
         ret, frame = cap.read()
@@ -166,7 +168,9 @@ if __name__ == '__main__':
             colors = pkl.load(open("pallete", "rb"))
             
             sound = ''.join(list(map(lambda x: write(x, orig_im,net,transform), output)))
-            if(cnt % 70 == 0 and sound != ''):
+            if(cnt % 50 == 0 and sound != ''):
+                print(time.time()-start)
+                start = time.time()
                 sound += "です。"
                 jtalk(sound) 
             #list(map(lambda x: write(x, orig_im,transform), output))
