@@ -1,5 +1,6 @@
 ## 必要なライブラリ
 cv2  
+[ここ](https://github.com/AastaNV/JEP/blob/master/script/install_opencv4.1.1_Jetson.sh)を参考にすること。
 OpenJTalk
 ```
 $ sudo apt-get install open-jtalk
