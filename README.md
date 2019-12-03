@@ -6,9 +6,9 @@ $ sudo apt-get install open-jtalk
 ```
 また、音声データも必要
 ```
-$ wget https://sourceforge.net/projects/mmdagent/files/MMDAgent_Example/MMDAgent_Example-1.7/MMDAgent_Example-1.7.zip
-$ unzip ./MMDAgent_Example-1.7.zip 
-$ sudo cp -R ./MMDAgent_Example-1.7/Voice/mei /usr/share/hts-voice/
+$ wget https://sourceforge.net/projects/mmdagent/files/MMDAgent_Example/MMDAgent_Example-1.6/MMDAgent_Example-1.6.zip
+$ unzip ./MMDAgent_Example-1.6.zip 
+$ sudo cp -R ./MMDAgent_Example-1.6/Voice/mei /usr/share/hts-voice/
 
 ```
 yoloの学習済みデータダウンロード
